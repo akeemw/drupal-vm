@@ -36,6 +36,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.vm.network :public_network, ip: vconfig['vagrant_public_ip']
   end
 
+  # Alpha Addition - Port forwarding for external access and browsersync
+  config.vm.network "forwarded_port", guest: 80, host: 9999,
+    auto_correct: true
+  config.vm.network "forwarded_port", guest: 3000, host: 3333,
+    auto_correct: true
+
   config.ssh.insert_key = false
   config.ssh.forward_agent = true
 
