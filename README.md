@@ -1,3 +1,25 @@
+# Drupal VM (Alpha Variant) Quick Start
+
+Drupal VM - Alpha is a set of small alterations to the amazing core built by geerlingguy. It's focus is streamlining the multiple sites in one environment use-case as well as add additional items by default to aid front end development.
+
+## Quick Start (Mac)
+* Install PIP: `sudo easy_install pip`
+* Install Ansible: `sudo pip install ansible`
+* Clone this repository: `git clone https://github.com/akeemw/drupal-vm.git`
+* Copy contents `examples/dev-box-alpa/dba.yml` into a new file `config.yml` that will be in the root folder.
+* Install Vagrant Host Updater `vagrant plugin install vagrant-hostsupdater`
+* Run `vagrant up`
+
+## Enabling SSH Agent forwarding
+* Mac: `/usr/bin/ssh-add -K keyname`
+
+## Changes
+* Port forwarding for ports 80 and 3000 (browsersync).
+* Addition of a 'dev-box-alpa' example config file.
+* Addition of new projects task
+
+---
+
 ![Drupal VM Logo](https://raw.githubusercontent.com/geerlingguy/drupal-vm/master/docs/images/drupal-vm-logo.png)
 
 [![Build Status](https://travis-ci.org/geerlingguy/drupal-vm.svg?branch=master)](https://travis-ci.org/geerlingguy/drupal-vm) [![Documentation Status](https://readthedocs.org/projects/drupal-vm/badge/?version=latest)](http://docs.drupalvm.com)

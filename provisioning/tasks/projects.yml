@@ -1,0 +1,37 @@
+---
+
+- name: Ensure folder created for project
+  file: path=/var/www/{{ item.name }} state=directory
+  with_items: apache_vhosts
+  when: item.is_project | default(False)
+
+- name: Ensure ansible folder created for project
+  file: path=/var/www/ansible/{{ item.name }} state=directory
+  with_items: apache_vhosts
+  when: item.is_project | default(False)
+
+- name: Create D7 local.settings.php
+  template:
+    src: ../templates/local.settings.php.j2
+    dest: "/var/www/ansible/{{ item.name }}/local.settings.php"
+  with_items: apache_vhosts
+  when: item.is_project | default(False)
+
+- name: Ensure Project MySQL databases are present.
+  mysql_db:
+    name: "{{ item.name }}"
+    collation: "{{ item.collation | default('utf8_general_ci') }}"
+    encoding: "{{ item.encoding | default('utf8') }}"
+    state: present
+  with_items: apache_vhosts
+  when: item.is_project | default(False)
+
+- name: Ensure Project MySQL users are present.
+  mysql_user:
+    name: "{{ item.name }}"
+    host: "localhost"
+    password: "{{ item.name }}"
+    priv: "{{ item.name }}.*:ALL"
+    state: present
+  with_items: apache_vhosts
+  when: item.is_project | default(False)
