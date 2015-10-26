@@ -17,10 +17,10 @@ Drupal VM - Alpha is a set of small alterations to the amazing core built by gee
 Add a new item into "apache_vhosts" in the config.yml file with "is_project" set to true.
 
       - name: "drupalvm"
-      servername: "drupalvm.dev"
-      documentroot: "/var/www/drupalvm"
-      serveralias: "drupalvm.*.xip.io"
-      is_project: true
+        servername: "drupalvm.dev"
+        documentroot: "/var/www/drupalvm"
+        serveralias: "drupalvm.*.xip.io"
+        is_project: true
 
 
 ## Where can I find my projects?
