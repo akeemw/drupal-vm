@@ -26,10 +26,15 @@ Add a new item into "apache_vhosts" in the config.yml file with "is_project" set
 ## Where can I find my projects?
 The `~/Sites/drupalvm-alpha` folder on your Mac will be mounted within the Vagrant VM at `/var/www/`.
 
-## Enabling SSH Agent forwarding
+## Enabling SSH Agent forwarding (Mac)
 SSH Agent forwarding is required if you want to be able to use your Mac's SSH keys from within the VM.
 
-* Mac: `/usr/bin/ssh-add -K keyname1 keyname2`
+1. Add the following to `~/.ssh/config`
+
+        Host 192.168.88.88
+           ForwardAgent yes
+
+2. In Terminal.app add Keys to the SSH Agent: `/usr/bin/ssh-add -K keyname1 keyname2`
 
 ## Changes
 * Port forwarding for ports 80 and 3000 (browsersync).
