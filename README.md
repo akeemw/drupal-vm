@@ -3,15 +3,33 @@
 Drupal VM - Alpha is a set of small alterations to the amazing core built by geerlingguy. It's focus is streamlining the multiple sites in one environment use-case as well as add additional items by default to aid front end development.
 
 ## Quick Start (Mac)
-* Install PIP: `sudo easy_install pip`
-* Install Ansible: `sudo pip install ansible`
-* Clone this repository: `git clone https://github.com/akeemw/drupal-vm.git`
-* Copy contents `examples/dev-box-alpa/dba.yml` into a new file `config.yml` that will be in the root folder.
-* Install Vagrant Host Updater `vagrant plugin install vagrant-hostsupdater`
-* Run `vagrant up`
+1. Install PIP: `sudo easy_install pip`
+2. Install Ansible: `sudo pip install ansible`
+3. Clone this repository: `git clone https://github.com/akeemw/drupal-vm.git`
+4. In the resulting "drupal-vm" folder there will be a folder named "examples." Copy the contents of `examples/dev-box-alpa/dba.yml` into a new file named `config.yml` and move that file into the root, "drupal-vm," folder (i.e. `/drupal-vm/config.yml`).
+5. In Terminal.app `cd` into the "drupal-vm" folder.
+6. Install Vagrant Host Updater: `vagrant plugin install vagrant-hostsupdater`
+7. Install Required Ansible Roles: `sudo ansible-galaxy install -r provisioning/requirements.yml --force`
+8. Add projects and vhosts as necessary (more information below).
+9. Run `vagrant up`
+
+## How do I add a project?
+Add a new item into "apache_vhosts" in the config.yml file with "is_project" set to true.
+
+      - name: "drupalvm"
+      servername: "drupalvm.dev"
+      documentroot: "/var/www/drupalvm"
+      serveralias: "drupalvm.*.xip.io"
+      is_project: true
+
+
+## Where can I find my projects?
+The `~/Sites/drupalvm-alpha` folder on your Mac will be mounted within the Vagrant VM at `/var/www/`.
 
 ## Enabling SSH Agent forwarding
-* Mac: `/usr/bin/ssh-add -K keyname`
+SSH Agent forwarding is required if you want to be able to use your Mac's SSH keys from within the VM.
+
+* Mac: `/usr/bin/ssh-add -K keyname1 keyname2`
 
 ## Changes
 * Port forwarding for ports 80 and 3000 (browsersync).
