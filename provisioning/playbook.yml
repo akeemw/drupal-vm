@@ -94,7 +94,7 @@
       when: ansible_os_family == 'Debian'
 
     # Projects
-    #- include: tasks/projects.yml
+    - include: tasks/projects.yml
 
     # Build makefile if configured.
     - include: tasks/build-makefile.yml
