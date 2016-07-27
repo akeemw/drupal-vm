@@ -2,7 +2,7 @@
 
 To enable Varnish, make sure `varnish` is in the list of your `installed_extras` in `config.yml`, and run `vagrant provision`.
 
-There are a few varnish configuration variables further down in `example.config.yml` that you may wish to configure. You can use your own `.vcl` file template (instead of the generic Drupal 7-focused generic one) by editing the `varnish_default_vcl_template_path`, and you can use a different port for Varnish by changing `varnish_listen_port`.
+There are a few varnish configuration variables further down in `default.config.yml` that you may wish to configure. You can use your own `.vcl` file template (instead of the generic Drupal 7-focused generic one) by editing the `varnish_default_vcl_template_path`, and you can use a different port for Varnish by changing `varnish_listen_port`.
 
 If you'd like to use Varnish on port 80, and switch Apache to a different backend port, you can do so pretty easily; just make sure you have the following values set in your `config.yml` file, and run `vagrant provision` to have Ansible make the necessary changes:
 
@@ -25,8 +25,8 @@ In order for Varnish to actually do anything helpful (instead of just pass throu
 You will also need to make a few small changes to your site's `settings.php` configuration to make Drupal work correctly behind a reverse proxy like Varnish:
 
 ```php
-$conf['reverse_proxy'] = TRUE;
-$conf['reverse_proxy_addresses'] = array('127.0.0.1');
+$settings['reverse_proxy'] = TRUE;
+$settings['reverse_proxy_addresses'] = array('127.0.0.1');
 ```
 
 If you don't set these values, Drupal will think all requests are coming from `127.0.0.1`. There are other settings you can change to make Drupal not store copies of cached pages in the Database (since Varnish is caching everything, this is redundant), but those other settings are not covered here.

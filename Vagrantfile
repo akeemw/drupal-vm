@@ -1,6 +1,17 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 VAGRANTFILE_API_VERSION = '2'
+Vagrant.require_version '>= 1.8.1'
+
+# Absolute paths on the host machine.
+host_drupalvm_dir = File.dirname(File.expand_path(__FILE__))
+host_project_dir = ENV['DRUPALVM_PROJECT_ROOT'] || host_drupalvm_dir
+host_config_dir = ENV['DRUPALVM_CONFIG_DIR'] ? "#{host_project_dir}/#{ENV['DRUPALVM_CONFIG_DIR']}" : host_project_dir
+
+# Absolute paths on the guest machine.
+guest_project_dir = '/vagrant'
+guest_drupalvm_dir = ENV['DRUPALVM_DIR'] ? "/vagrant/#{ENV['DRUPALVM_DIR']}" : guest_project_dir
+guest_config_dir = ENV['DRUPALVM_CONFIG_DIR'] ? "/vagrant/#{ENV['DRUPALVM_CONFIG_DIR']}" : guest_project_dir
 
 # Cross-platform way of finding an executable in the $PATH.
 def which(cmd)
@@ -24,13 +35,15 @@ def walk(obj, &fn)
   end
 end
 
-# Use config.yml for basic VM configuration.
 require 'yaml'
-dir = File.dirname(File.expand_path(__FILE__))
-unless File.exist?("#{dir}/config.yml")
-  raise 'Configuration file not found! Please copy example.config.yml to config.yml and try again.'
+# Load default VM configurations.
+vconfig = YAML.load_file("#{host_drupalvm_dir}/default.config.yml")
+# Use optional config.yml and local.config.yml for configuration overrides.
+['config.yml', 'local.config.yml'].each do |config_file|
+  if File.exist?("#{host_config_dir}/#{config_file}")
+    vconfig.merge!(YAML.load_file("#{host_config_dir}/#{config_file}"))
+  end
 end
-vconfig = YAML.load_file("#{dir}/config.yml")
 
 # Replace jinja variables in config.
 vconfig = walk(vconfig) do |value|
@@ -100,7 +113,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       rsync__args: ['--verbose', '--archive', '--delete', '-z', '--chmod=ugo=rwX'],
       id: synced_folder['id'],
       create: synced_folder.include?('create') ? synced_folder['create'] : false,
-      mount_options: synced_folder.include?('mount_options') ? synced_folder['mount_options'] : []
+      mount_options: synced_folder.include?('mount_options') ? synced_folder['mount_options'] : nil
     }
     if synced_folder.include?('options_override')
       options = options.merge(synced_folder['options_override'])
@@ -109,31 +122,29 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   # Allow override of the default synced folder type.
-  config.vm.synced_folder '.', '/vagrant', type: vconfig.include?('vagrant_synced_folder_default_type') ? vconfig['vagrant_synced_folder_default_type'] : 'nfs'
+  config.vm.synced_folder host_project_dir, '/vagrant', type: vconfig.include?('vagrant_synced_folder_default_type') ? vconfig['vagrant_synced_folder_default_type'] : 'nfs'
 
-  # Provisioning. Use ansible if it's installed, JJG-Ansible-Windows if not.
+  # Provisioning. Use ansible if it's installed, ansible_local if not.
   if which('ansible-playbook')
     config.vm.provision 'ansible' do |ansible|
-      ansible.playbook = "#{dir}/provisioning/playbook.yml"
+      ansible.playbook = "#{host_drupalvm_dir}/provisioning/playbook.yml"
+      ansible.extra_vars = {
+        config_dir: host_config_dir
+      }
     end
   else
-    config.vm.provision 'shell' do |sh|
-      sh.path = "#{dir}/provisioning/JJG-Ansible-Windows/windows.sh"
-      sh.args = '/provisioning/playbook.yml'
+    config.vm.provision 'ansible_local' do |ansible|
+      ansible.playbook = "#{guest_drupalvm_dir}/provisioning/playbook.yml"
+      ansible.extra_vars = {
+        config_dir: guest_config_dir
+      }
     end
   end
-  # ansible_local provisioner is broken in Vagrant < 1.8.2.
-  # else
-  #   config.vm.provision "ansible_local" do |ansible|
-  #     ansible.playbook = "provisioning/playbook.yml"
-  #     ansible.galaxy_role_file = "provisioning/requirements.yml"
-  #   end
-  # end
 
   # VMware Fusion.
   config.vm.provider :vmware_fusion do |v, override|
     # HGFS kernel module currently doesn't load correctly for native shares.
-    override.vm.synced_folder '.', '/vagrant', type: 'nfs'
+    override.vm.synced_folder host_project_dir, '/vagrant', type: 'nfs'
 
     v.gui = false
     v.vmx['memsize'] = vconfig['vagrant_memory']
@@ -162,6 +173,15 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Set the name of the VM. See: http://stackoverflow.com/a/17864388/100134
   config.vm.define vconfig['vagrant_machine_name']
 
+  # Cache packages and dependencies if vagrant-cachier plugin is present.
+  if Vagrant.has_plugin?('vagrant-cachier')
+    config.cache.scope = :box
+    config.cache.auto_detect = false
+    config.cache.enable :apt
+    # Cache the composer directory.
+    config.cache.enable :generic, cache_dir: '/home/vagrant/.composer/cache'
+  end
+
   # Allow an untracked Vagrantfile to modify the configurations
-  eval File.read 'Vagrantfile.local' if File.exist?('Vagrantfile.local')
+  eval File.read "#{host_config_dir}/Vagrantfile.local" if File.exist?("#{host_config_dir}/Vagrantfile.local")
 end

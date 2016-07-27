@@ -1,10 +1,10 @@
-You can share folders between your host computer and the VM in a variety of ways; the most commonly-used method is an NFS share. If you use Windows and encounter any problems with NFS, try switching to `smb`. The `example.config.yml` file contains an example `nfs` share that would sync the folder `~/Sites/drupalvm` on your host into the `/var/www/drupalvm` folder on Drupal VM.
+You can share folders between your host computer and the VM in a variety of ways; the most commonly-used method is an NFS share. If you use Windows and encounter any problems with NFS, try switching to `smb`. The `default.config.yml` file contains an example `nfs` share that would sync the entire drupal-vm directory (configured as the relative path `.`) on your host into the `/var/www/drupalvm` folder on Virtual Machine.
 
 If you want to use a different synced folder method (e.g. `smb`), you can change `type` to:
 
 ```yaml
 vagrant_synced_folders:
-  - local_path: ~/Sites/drupalvm
+  - local_path: .
     destination: /var/www/drupalvm
     type: smb
     create: true
@@ -54,7 +54,7 @@ If you are using rsync, it is advised to exclude certain directories so that the
 
 ```yaml
 vagrant_synced_folders:
-  - local_path: ~/Sites/drupalvm
+  - local_path: .
     destination: /var/www/drupalvm
     type: rsync
     create: true
@@ -73,11 +73,11 @@ There are a number of issues people encounter with synced folders from time to t
 
 ### Using Native Synced Folders
 
-You can use a native synced folder, which should work pretty flawlessly on any platform, but with a potential serious performance downside (compared to other synced folder methods). Just set `type` to `""`, and you can even put the synced folder inside the drupal-vm folder using a relative path, like:
+You can use a native synced folder, which should work pretty flawlessly on any platform, but with a potential serious performance downside (compared to other synced folder methods). Just set `type` to `""`.
 
 ```yaml
 vagrant_synced_folders:
-  - local_path: docroot
+  - local_path: .
     destination: /var/www/docroot
     type: ""
     create: true
@@ -102,6 +102,30 @@ mount_options: ["dmode=775,fmode=664"]
 ```
 
 See [this issue](https://github.com/geerlingguy/drupal-vm/issues/66) for more details.
+
+### Using [`vagrant-bindfs`](https://github.com/gael-ian/vagrant-bindfs) to work around permissions-related errors
+
+If you're using NFS synced folders the mounted directories will use the same numeric permissions on the guest VM as on the host OS. If you're on OSX for instance, your files within the VM would be owned by 501:20. To correct these permissions you can use the [`vagrant-bindfs` plugin](https://github.com/gael-ian/vagrant-bindfs) to mount your NFS folders to a temporary location and then re-mount them to the actual destination with the correct ownership.
+
+First install the plugin with `vagrant plugin install vagrant-bindfs` and then add a `Vagrantfile.local` with the following:
+
+```rb
+vconfig['vagrant_synced_folders'].each do |synced_folder|
+  case synced_folder['type']
+  when "nfs"
+    guest_path = synced_folder['destination']
+    host_path = File.expand_path(synced_folder['local_path'])
+    config.vm.synced_folders[guest_path][:guestpath] = "/var/nfs#{host_path}"
+    config.bindfs.bind_folder "/var/nfs#{host_path}", guest_path,
+      u: 'vagrant',
+      g: 'www-data',
+      perms: 'u=rwX:g=rwD',
+      o: 'nonempty'
+    config.nfs.map_uid = Process.uid
+    config.nfs.map_gid = Process.gid
+  end
+end
+```
 
 ### Other NFS-related errors
 

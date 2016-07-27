@@ -4,9 +4,19 @@
 
   vars_files:
     - vars/main.yml
-    - ../config.yml
+    - ../default.config.yml
 
   pre_tasks:
+    - name: Define config_dir.
+      set_fact:
+        config_dir: "{{ playbook_dir }}/.."
+      when: config_dir is not defined
+
+    - include_vars: "{{ item }}"
+      with_fileglob:
+        - "{{ config_dir }}/config.yml"
+        - "{{ config_dir }}/local.config.yml"
+
     - include: tasks/init-debian.yml
       when: ansible_os_family == 'Debian'
     - include: tasks/init-redhat.yml
@@ -14,8 +24,12 @@
 
     - name: Run configured pre-provision shell scripts.
       script: "{{ item }}"
-      with_items: "{{ pre_provision_scripts }}"
-      when: pre_provision_scripts is defined
+      with_items: "{{ pre_provision_scripts|default([]) }}"
+
+    - name: Run configured pre-provision ansible task files.
+      include: "{{ item }}"
+      with_fileglob:
+        - "{{ pre_provision_tasks_dir|default(omit) }}"
 
     - name: Set the PHP webserver daemon correctly when nginx is in use.
       set_fact:
@@ -54,9 +68,10 @@
     - { role: geerlingguy.redis, when: '"redis" in installed_extras' }
     - { role: geerlingguy.php-redis, when: '"redis" in installed_extras' }
     - { role: geerlingguy.ruby, when: '"ruby" in installed_extras' }
-    - { role: geerlingguy.java, when: '"solr" in installed_extras or "selenium" in installed_extras' }
+    - { role: geerlingguy.java, when: '"solr" in installed_extras or "selenium" in installed_extras or "elasticsearch" in installed_extras'}
     - { role: arknoll.selenium, when: '"selenium" in installed_extras' }
     - { role: geerlingguy.solr, when: '"solr" in installed_extras' }
+    - { role: geerlingguy.elasticsearch, when: '"elasticsearch" in installed_extras' }
     - { role: geerlingguy.varnish, when: '"varnish" in installed_extras' }
 
     # Roles for security and stability on production.
@@ -66,6 +81,11 @@
     - name: Check if Drupal is already set up.
       stat: "path={{ drupal_core_path }}/index.php"
       register: drupal_site
+      ignore_errors: true
+
+    - name: Define drupal_site_exists
+      set_fact:
+        drupal_site_exists: "{{ drupal_site.stat.exists|default(false) }}"
 
     - include: tasks/sshd.yml
     - include: tasks/extras.yml
@@ -80,6 +100,14 @@
     - include: tasks/build-makefile.yml
       when: build_makefile
 
+    # Build with composer if configured.
+    - include: tasks/build-composer.yml
+      when: build_composer
+
+    # Build a composer project if configured.
+    - include: tasks/build-composer-project.yml
+      when: build_composer_project
+
     # Install site if configured.
     - include: tasks/install-site.yml
       when: install_site
@@ -92,5 +120,9 @@
 
     - name: Run configured post-provision shell scripts.
       script: "{{ item }}"
-      with_items: "{{ post_provision_scripts }}"
-      when: post_provision_scripts is defined
+      with_items: "{{ post_provision_scripts|default([]) }}"
+
+    - name: Run configured post-provision ansible task files.
+      include: "{{ item }}"
+      with_fileglob:
+        - "{{ post_provision_tasks_dir|default(omit) }}"

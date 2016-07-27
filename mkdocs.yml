@@ -12,6 +12,7 @@ pages:
   - Home: 'index.md'
   - Drupal Deployment Strategies:
     - 'Drush Make file': 'deployment/drush-make.md'
+    - 'Composer': 'deployment/composer.md'
     - 'Local Drupal codebase': 'deployment/local-codebase.md'
     - 'Drupal multisite': 'deployment/multisite.md'
   - Extra Software and Setup:
@@ -29,12 +30,13 @@ pages:
     - 'Debug Code with XDebug': 'extras/xdebug.md'
     - 'Catch Emails with MailHog': 'extras/mailhog.md'
     - 'Test with Behat and Selenium': 'extras/behat.md'
-    - 'Add Post-Provision Scripts': 'extras/scripts.md'
+    - 'Add Pre- and Post-Provision Scripts': 'extras/scripts.md'
   - Other Information:
     - 'Using Different Base OSes': 'other/base-os.md'
     - 'Using Different Webservers': 'other/webservers.md'
-    - 'Using a local Vagrantfile': 'other/local-vagrantfile.md'
-    - 'PHP 7 on Drupal VM': 'other/php-7.md'
+    - 'Overriding configurations': 'other/overriding-configurations.md'
+    - 'Installing Drupal VM as a Composer Dependency': 'other/drupalvm-composer-dependency.md'
+    - 'PHP 5.6 on Drupal VM': 'other/php-56.md'
     - 'BigPipe with Drupal VM': 'other/bigpipe.md'
     - 'Drupal VM Management Tools': 'other/management-tools.md'
     - 'Networking Notes': 'other/networking.md'

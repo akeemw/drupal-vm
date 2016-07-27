@@ -2,28 +2,19 @@ Drupal VM's configuration is designed to work with RedHat and Debian-compatible 
 
 Currently-supported OSes are:
 
-  - Ubuntu 16.04
-  - Ubuntu 14.04 (default)
+  - Ubuntu 16.04 (default)
+  - Ubuntu 14.04
   - Ubuntu 12.04
   - RedHat Enterprise Linux / CentOS 7
   - RedHat Enterprise Linux / CentOS 6
 
-For certain OSes, there are a couple other caveats and tweaks you may need to perform to get things running smoothly—the main features and latest development is only guaranteed to work with the default OS as configured in `example.config.yml`.
+For certain OSes, there are a couple other caveats and tweaks you may need to perform to get things running smoothly—the main features and latest development is only guaranteed to work with the default OS as configured in `default.config.yml`.
 
 Some other OSes should work, but are not regularly tested with Drupal VM, including Debian 8/Jessie (`debian/jessie64`) and Debian 7/Wheezy (`debian/wheezy64`).
 
 ## Ubuntu 16.04 Xenial LTS
 
-Ubuntu 16.04 is the latest LTS release, and there are a few changes currently required to make sure Drupal VM runs smoothly on it. Note also that Ubuntu 16.04 defaults to PHP 7; older versions of PHP will not be supported on this OS.
-
-**Redis**: If using redis, add the line `php_redis_package: php-redis` to `config.yml` before provisioning.
-
-Installed extras that are currently unsupported on Ubuntu 16.04:
-
-  - `memcached`
-  - `selenium`
-  - `varnish`
-  - `xhprof`
+Everything should work out of the box with Ubuntu 16.04.
 
 ## Ubuntu 14.04 Trusty LTS
 
