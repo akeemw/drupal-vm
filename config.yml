@@ -1,0 +1,155 @@
+# ---------------------------------------------
+# Project Configuration
+# ---------------------------------------------
+
+# Apache VirtualHosts. Add one for each site you are running inside the VM. For
+# multisite deployments, you can point multiple servernames at one documentroot.
+# View the geerlingguy.apache Ansible Role README for more options.
+apache_vhosts:
+  - servername: "adminer.{{ vagrant_hostname }}"
+    documentroot: "{{ adminer_install_dir }}"
+    extra_parameters: |
+          ProxyPassMatch ^/(.*\.php(/.*)?)$ "fcgi://127.0.0.1:9000{{ adminer_install_dir }}"
+
+  - servername: "xhprof.{{ vagrant_hostname }}"
+    documentroot: "{{ php_xhprof_html_dir }}"
+    extra_parameters: |
+          ProxyPassMatch ^/(.*\.php(/.*)?)$ "fcgi://127.0.0.1:9000{{ php_xhprof_html_dir }}"
+
+  - servername: "pimpmylog.{{ vagrant_hostname }}"
+    documentroot: "{{ pimpmylog_install_dir }}"
+    extra_parameters: |
+          ProxyPassMatch ^/(.*\.php(/.*)?)$ "fcgi://127.0.0.1:9000{{ pimpmylog_install_dir }}"
+
+  - servername: "{{ vagrant_ip }}"
+    serveralias: "dashboard.{{ vagrant_hostname }}"
+    documentroot: "{{ dashboard_install_dir }}"
+    extra_parameters: |
+          ProxyPassMatch ^/(.*\.php(/.*)?)$ "fcgi://127.0.0.1:9000{{ dashboard_install_dir }}"
+          DirectoryIndex index.html
+
+apache_remove_default_vhost: true
+apache_mods_enabled:
+  - expires.load
+  - ssl.load
+  - rewrite.load
+  - proxy.load
+  - proxy_fcgi.load
+
+
+
+install_site: false
+
+# ---------------------------------------------
+# Installed Extras
+# ---------------------------------------------
+
+installed_extras:
+  - adminer
+  # - blackfire
+  - drupalconsole
+  # - elasticsearch
+  - mailhog
+  # - memcached
+  # - newrelic
+  - nodejs
+  - pimpmylog
+  # - redis
+  - ruby
+  # - selenium
+  # - solr
+  - varnish
+  - xdebug
+  # - xhprof
+
+# Add any extra apt or yum packages you would like installed.
+extra_packages:
+  - unzip
+  - htop
+  - libnotify-bin
+  - pv
+  - sqlite
+
+# ---------------------------------------------
+# Installed Extra: NodeJS
+# ---------------------------------------------
+
+# `nodejs` must be in installed_extras for this to work.
+nodejs_npm_global_packages:
+  - name: bower
+  - name: gulp
+
+
+# ---------------------------------------------
+# Installed Extra: Ruby
+# ---------------------------------------------
+
+# `ruby` must be in installed_extras for this to work.
+ruby_install_gems: ['bundler']
+
+# ---------------------------------------------
+# PHP Configuration Overrides
+# ---------------------------------------------
+
+php_version: "5.6"
+php_packages:
+  - php5
+  - php5-apcu
+  - php5-mcrypt
+  - php5-cli
+  - php5-common
+  - php5-curl
+  - php5-dev
+  - php5-fpm
+  - php5-gd
+  - php5-sqlite
+  - php-pear
+  - libpcre3-dev
+php_conf_paths:
+  - /etc/php5/fpm
+  - /etc/php5/apache2
+  - /etc/php5/cli
+php_extension_conf_paths:
+  - /etc/php5/fpm/conf.d
+  - /etc/php5/apache2/conf.d
+  - /etc/php5/cli/conf.d
+php_fpm_daemon: php5-fpm
+php_fpm_conf_path: "/etc/php5/fpm"
+php_fpm_pool_conf_path: "/etc/php5/fpm/pool.d/www.conf"
+php_mysql_package: php5-mysql
+
+
+# ---------------------------------------------
+# Firewall & Security
+# ---------------------------------------------
+
+firewall_allowed_tcp_ports:
+  - "22"
+  - "25"
+  - "80"
+  - "81"
+  - "3000" #browsersync
+  - "443"
+  - "4444"
+  - "8025"
+  - "8080"
+  - "8443"
+  - "8983"
+
+# ---------------------------------------------
+# Core VM Configuration
+# ---------------------------------------------
+
+vagrant_box: geerlingguy/ubuntu1404
+
+# Memory and CPU to use for this VM.
+vagrant_memory: 2048
+vagrant_cpus: 2
+
+vagrant_synced_folders:
+# The first synced folder will be used for the default Drupal installation, if
+# build_makefile: is 'true'.
+- local_path: ~/Sites/drupalvm-alpha
+  destination: /var/www
+  type: nfs
+  create: true
