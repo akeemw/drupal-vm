@@ -37,7 +37,7 @@ apache_mods_enabled:
   - proxy_fcgi.load
 
 
-
+build_composer_project: false
 install_site: false
 
 # ---------------------------------------------
