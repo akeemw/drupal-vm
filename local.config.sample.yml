@@ -6,6 +6,8 @@ apache_vhosts:
     servername: "flat-base.dev"
     documentroot: "/var/www/flat-base/_site"
     serveralias: "flat-base.*.xip.io"
+    extra_parameters: |
+          ProxyPassMatch ^/(.*\.php(/.*)?)$ "fcgi://127.0.0.1:9000/var/www/flat-base/_site"
     is_project: true
 
   - servername: "adminer.{{ vagrant_hostname }}"
