@@ -21,6 +21,8 @@ Add a new item into "apache_vhosts" in the config.yml file with "is_project" set
         documentroot: "/var/www/drupalvm"
         serveralias: "drupalvm.*.xip.io"
         is_project: true
+        extra_parameters: |
+              ProxyPassMatch ^/(.*\.php(/.*)?)$ "fcgi://127.0.0.1:9000/var/www/drupalvm"
 
 
 ## Where can I find my projects?
@@ -34,12 +36,15 @@ SSH Agent forwarding is required if you want to be able to use your Mac's SSH ke
         Host 192.168.88.88
            ForwardAgent yes
 
-2. In Terminal.app add Keys to the SSH Agent: `/usr/bin/ssh-add -K keyname1 keyname2`
+2. In Terminal.app add Keys to the SSH Agent. For example:
+
+        /usr/bin/ssh-add -K ~/.ssh/id_rsa.pub
 
 ## Changes
 * Port forwarding for ports 80 and 3000 (browsersync).
 * Addition of a 'dev-box-alpa' example config file.
 * Addition of new projects task
+* Addition of slim, projects-only provision
 
 ---
 
