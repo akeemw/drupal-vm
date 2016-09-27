@@ -36,9 +36,10 @@ apache_mods_enabled:
   - proxy.load
   - proxy_fcgi.load
 
-
-
 install_site: false
+
+# Enable to only run tasks that are required for new projects.
+projects_only_provision: false
 
 # ---------------------------------------------
 # Installed Extras

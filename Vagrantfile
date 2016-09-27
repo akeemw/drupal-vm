@@ -128,7 +128,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   if which('ansible-playbook') && !vconfig['force_ansible_local']
     config.vm.provision 'ansible' do |ansible|
       ansible.playbook = "#{host_drupalvm_dir}/provisioning/playbook.yml"
-      if (vconfig['projects_only'] === true)
+      if (vconfig['projects_only_provision'] === true)
         ansible.tags="projects"
       end
       ansible.extra_vars = {
