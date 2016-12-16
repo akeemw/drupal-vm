@@ -11,11 +11,13 @@
       set_fact:
         config_dir: "{{ playbook_dir }}/.."
       when: config_dir is not defined
+      tags: [projects]
 
     - include_vars: "{{ item }}"
       with_fileglob:
         - "{{ config_dir }}/config.yml"
         - "{{ config_dir }}/local.config.yml"
+      tags: [projects]
 
     - include: tasks/init-debian.yml
       when: ansible_os_family == 'Debian'
@@ -42,10 +44,10 @@
     - geerlingguy.firewall
     - geerlingguy.git
     - geerlingguy.postfix
-    - { role: geerlingguy.apache, when: drupalvm_webserver == 'apache' }
+    - { role: geerlingguy.apache, when: drupalvm_webserver == 'apache', tags: [ 'projects' ] }
     - { role: geerlingguy.apache-php-fpm, when: drupalvm_webserver == 'apache' }
     - { role: geerlingguy.nginx, when: drupalvm_webserver == 'nginx' }
-    - geerlingguy.mysql
+    - { role: geerlingguy.mysql, tags: [ 'projects' ] }
     - geerlingguy.php
     - geerlingguy.php-pecl
     - geerlingguy.php-mysql
@@ -95,6 +97,7 @@
 
     # Projects
     - include: tasks/projects.yml
+      tags: [projects]
 
     # Build makefile if configured.
     - include: tasks/build-makefile.yml
