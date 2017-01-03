@@ -2,6 +2,12 @@
 
 Drupal VM - Alpha is a set of small alterations to the amazing core built by geerlingguy. It's focus is streamlining the multiple sites in one environment use-case as well as add additional items by default to aid front end development.
 
+## Software Prerequisites
+* XCode - OS X Command Line Tools (https://itunes.apple.com/us/app/xcode/id497799835?mt=12)
+ * Run `xcode-select --install` in terminal after install
+* Virtual Box (https://www.virtualbox.org/)
+* Vagrant (https://www.vagrantup.com/)
+
 ## Quick Start (Mac)
 1. Install PIP: `sudo easy_install pip`
 2. Install Ansible: `sudo pip install ansible`
