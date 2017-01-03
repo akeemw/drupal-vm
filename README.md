@@ -12,10 +12,9 @@ Drupal VM - Alpha is a set of small alterations to the amazing core built by gee
 1. Install PIP: `sudo easy_install pip`
 2. Install Ansible: `sudo pip install ansible`
 3. Clone this repository: `git clone https://github.com/akeemw/drupal-vm.git`
-4. In the resulting "drupal-vm" folder there will be a folder named "examples." Copy the contents of `examples/dev-box-alpa/dba.yml` into a new file named `config.yml` and move that file into the root, "drupal-vm," folder (i.e. `/drupal-vm/config.yml`).
-5. In Terminal.app `cd` into the "drupal-vm" folder.
-6. Install Vagrant Host Updater: `vagrant plugin install vagrant-hostsupdater`
-7. Install Required Ansible Roles: `sudo ansible-galaxy install -r provisioning/requirements.yml --force`
+4. In Terminal.app `cd` into the "drupal-vm" folder.
+5. Install Vagrant Host Updater: `vagrant plugin install vagrant-hostsupdater`
+6. Install Required Ansible Roles: `sudo ansible-galaxy install -r provisioning/requirements.yml --force`
 7. Copy local.config.sample.yml and create local.config.yml
 8. Add projects to local.config.yml (more information below)
 9. Run `vagrant up`
