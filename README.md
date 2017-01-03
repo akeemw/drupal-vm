@@ -10,11 +10,12 @@ Drupal VM - Alpha is a set of small alterations to the amazing core built by gee
 5. In Terminal.app `cd` into the "drupal-vm" folder.
 6. Install Vagrant Host Updater: `vagrant plugin install vagrant-hostsupdater`
 7. Install Required Ansible Roles: `sudo ansible-galaxy install -r provisioning/requirements.yml --force`
-8. Add projects and vhosts as necessary (more information below).
+7. Copy local.config.sample.yml and create local.config.yml
+8. Add projects to local.config.yml (more information below)
 9. Run `vagrant up`
 
 ## How do I add a project?
-Add a new item into "apache_vhosts" in the config.yml file with "is_project" set to true.
+Add a new item into "apache_vhosts" in the local.config.yml file with "is_project" set to true.
 
       - name: "drupalvm"
         servername: "drupalvm.dev"
