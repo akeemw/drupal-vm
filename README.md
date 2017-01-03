@@ -22,13 +22,13 @@ Drupal VM - Alpha is a set of small alterations to the amazing core built by gee
 ## How do I add a project?
 Add a new item into "apache_vhosts" in the local.config.yml file with "is_project" set to true.
 
-      - name: "drupalvm"
-        servername: "drupalvm.dev"
-        documentroot: "/var/www/drupalvm"
-        serveralias: "drupalvm.*.xip.io"
+      - name: "myproject"
+        servername: "myproject.dev"
+        documentroot: "/var/www/myproject"
+        serveralias: "myproject.*.xip.io"
         is_project: true
         extra_parameters: |
-              ProxyPassMatch ^/(.*\.php(/.*)?)$ "fcgi://127.0.0.1:9000/var/www/drupalvm"
+              ProxyPassMatch ^/(.*\.php(/.*)?)$ "fcgi://127.0.0.1:9000/var/www/myproject"
 
 
 ## Where can I find my projects?
