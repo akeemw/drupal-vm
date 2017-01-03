@@ -42,7 +42,7 @@ http {
 {% endif %}
 
 {% if nginx_extra_http_options %}
-    {{ nginx_extra_http_options }}
+    {{ nginx_extra_http_options|indent(4, False) }}
 {% endif %}
 
 {% for upstream in nginx_upstreams %}
@@ -53,6 +53,9 @@ http {
 {% for server in upstream.servers %}
         server {{ server }};
 {% endfor %}
+{% if upstream.keepalive is defined %}
+        keepalive {{ upstream.keepalive }};
+{% endif %}
     }
 {% endfor %}
 

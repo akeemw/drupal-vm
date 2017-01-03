@@ -2,12 +2,12 @@
 # multisite deployments, you can point multiple servernames at one documentroot.
 # View the geerlingguy.apache Ansible Role README for more options.
 apache_vhosts:
-  - name: "flat-base"
+  - name: "sample-jekyll"
     servername: "flat-base.dev"
-    documentroot: "/var/www/flat-base/_site"
+    documentroot: "/var/www/sample-jekyll/_site"
     serveralias: "flat-base.*.xip.io"
     extra_parameters: |
-          ProxyPassMatch ^/(.*\.php(/.*)?)$ "fcgi://127.0.0.1:9000/var/www/flat-base/_site"
+          ProxyPassMatch ^/(.*\.php(/.*)?)$ "fcgi://127.0.0.1:9000/var/www/sample-jekyll/_site"
     is_project: true
 
   - servername: "adminer.{{ vagrant_hostname }}"
