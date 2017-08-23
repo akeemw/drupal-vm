@@ -32,6 +32,12 @@ Add a new item into "apache_vhosts" in the local.config.yml file with "is_projec
 ## Where can I find my projects?
 The `~/Sites/drupalvm-alpha` folder on your Mac will be mounted within the Vagrant VM at `/var/www/`.
 
+## Can I run a shorter provision process to set up a new site?
+
+Yes, run the following line in terminal:
+
+      DRUPALVM_ANSIBLE_TAGS=projects vagrant provision
+
 ## Enabling SSH Agent forwarding (Mac)
 SSH Agent forwarding is required if you want to be able to use your Mac's SSH keys from within the VM.
 
