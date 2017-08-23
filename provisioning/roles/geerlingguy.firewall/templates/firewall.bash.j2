@@ -8,7 +8,7 @@
 #   22: SSH
 #   25: SMTP
 #   80: HTTP
-#   123: DNS
+#   123: NTP
 #   443: HTTPS
 #   2222: SSH alternate
 #   4949: Munin
@@ -89,7 +89,7 @@ iptables -A INPUT -j DROP
 
 
 # Configure IPv6 if ip6tables is present.
-if [ -x $(which ip6tables) ]; then
+if [ -x "$(which ip6tables 2>/dev/null)" ]; then
 
   # Remove all rules and chains.
   ip6tables -F
