@@ -4,6 +4,7 @@
 apache_vhosts:
   - name: "flat-base"
     servername: "flat-base.dev"
+    serveralias: "flat-base.*.xip.io"
     documentroot: "/var/www/flat-base/_site"
     is_project: true
     extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
