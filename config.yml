@@ -23,13 +23,6 @@ apache_vhosts:
     documentroot: "{{ dashboard_install_dir }}"
     extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
 
-apache_mods_enabled:
-  - expires.load
-  - ssl.load
-  - rewrite.load
-  - proxy.load
-  - proxy_fcgi.load
-
 drupal_build_composer_project: false
 drupal_install_site: false
 
@@ -49,7 +42,7 @@ installed_extras:
   - drupalconsole
   - drush
   # - elasticsearch
-  # - java
+  # - javafirewall_allowed_tcp_ports
   - mailhog
   # - memcached
   # - newrelic
@@ -94,7 +87,7 @@ ruby_install_gems: ['bundler']
 # PHP Configuration Overrides
 # ---------------------------------------------
 
-php_version: "5.6"
+php_version: "7.1"
 # php_packages:
 #   - php5
 #   - php5-apcu
@@ -149,8 +142,6 @@ vagrant_memory: 2048
 vagrant_cpus: 2
 
 vagrant_synced_folders:
-# The first synced folder will be used for the default Drupal installation, if
-# build_makefile: is 'true'.
 - local_path: ~/Sites/drupalvm-alpha
   destination: /var/www
   type: nfs
