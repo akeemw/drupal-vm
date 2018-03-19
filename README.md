@@ -13,10 +13,9 @@ Drupal VM - Alpha is a set of small alterations to the amazing core built by gee
 2. Install Ansible: `sudo pip install ansible`
 3. Clone this repository: `git clone https://github.com/akeemw/drupal-vm.git`
 4. In Terminal.app `cd` into the "drupal-vm" folder.
-5. Install Required Ansible Roles: `sudo ansible-galaxy install -r provisioning/requirements.yml --force`
-6. Copy local.config.sample.yml and create local.config.yml
-7. Add projects to local.config.yml (more information below)
-8. Run `vagrant up`
+5. Copy local.config.sample.yml and create local.config.yml
+6. Add projects to local.config.yml (more information below)
+7. Run `vagrant up`
 
 ## How do I add a project?
 Add a new item into "apache_vhosts" in the local.config.yml file with "is_project" set to true.
