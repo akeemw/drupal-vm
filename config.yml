@@ -75,6 +75,7 @@ extra_packages:
 nodejs_npm_global_packages:
   - name: bower
   - name: gulp
+  - name: grunt
 
 
 # ---------------------------------------------
