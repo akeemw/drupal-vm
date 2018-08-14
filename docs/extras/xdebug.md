@@ -47,12 +47,29 @@ To use XDebug with NetBeans, change the `php_xdebug_idekey` variable as shown be
 ```yaml
 php_xdebug_idekey: netbeans-xdebug
 ```
+
 ### Atom and XDebug with Drupal VM
 
 To use XDebug with Atom, change the `php_xdebug_idekey` variable as shown below in `config.yml`, and then run `vagrant provision` to reconfigure the VM.
 
 ```yaml
 php_xdebug_idekey: xdebug-atom
+```
+
+### Eclipse and XDebug with Drupal VM
+
+To use XDebug with Eclipse, change the `php_xdebug_idekey` variable as shown below in `config.yml`, and then run `vagrant provision` to reconfigure the VM.
+
+```yaml
+php_xdebug_idekey: ECLIPSE_DBGP
+```
+
+### Visual Studio Code and XDebug with Drupal VM
+
+To use XDebug with Visual Studio Code, change the `php_xdebug_idekey` variable as shown below in `config.yml`, and then run `vagrant provision` to reconfigure the VM.
+
+```yaml
+php_xdebug_idekey: VSCODE
 ```
 
 ### XDebug over SSH/Drush
@@ -83,3 +100,6 @@ While most people use XDebug only for debugging purposes, you can also use it fo
 **Note**: You should only enable one code profiler at a time—e.g. when using [Blackfire](blackfire.md), disable [XHProf](xhprof.md), [Tideways](tideways.md) and [XDebug](xdebug.md).
 
 For a list of available role variables, see the [`geerlingguy.php-xdebug` Ansible role's README](https://github.com/geerlingguy/ansible-role-php-xdebug#readme).
+
+
+
