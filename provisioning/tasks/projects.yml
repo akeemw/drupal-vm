@@ -13,7 +13,14 @@
 - name: Create D7 local.settings.php
   template:
     src: ../templates/local.settings.php.j2
-    dest: "/var/www/ansible/{{ item.name }}/local.settings.php"
+    dest: "/var/www/ansible/{{ item.name }}/d7.local.settings.php"
+  with_items: "{{ apache_vhosts }}"
+  when: item.is_project | default(False)
+
+- name: Create D8 settings.local.php
+  template:
+    src: ../templates/d8.settings.local.php.j2
+    dest: "/var/www/ansible/{{ item.name }}/settings.local.php"
   with_items: "{{ apache_vhosts }}"
   when: item.is_project | default(False)
 
