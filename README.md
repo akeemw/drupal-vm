@@ -39,6 +39,28 @@ Yes, run the following line in terminal:
 
       DRUPALVM_ANSIBLE_TAGS=projects vagrant provision
 
+## Tmux & Tmuxinator
+
+[Tmux](https://github.com/tmux/tmux) & [Tmuxinator](https://github.com/tmuxinator/tmuxinator) are installed by default and tmuxinator configuration files will be created for all apache vhosts flagged with "is_project: true".
+
+By default each session is configured to have windows for:
+* Project Document Root
+* Tail of the Apache error log
+* Root for Gulp execution (requires "gulp_root" option to be specified on the project)
+
+Configuration files are created in `~/.config/tmuxinator/`
+
+Launch a Project Session:
+
+      tmuxinator projectname
+
+Leave a Project Session:
+
+      tmux detach
+
+Close a Project Session:
+
+      tmux kill-session -t projectname
 
 ## Port forwards
 Port forwarding has been configured to allow HTTP access into the Vagrant box by
@@ -61,11 +83,12 @@ SSH Agent forwarding is required if you want to be able to use your Mac's SSH ke
 
         /usr/bin/ssh-add -K ~/.ssh/id_rsa.pub
 
-## Changes
+## Changes & Additional Features
 * Port forwarding for ports 80 and 3000 (browsersync).
 * Addition of a 'dev-box-alpa' example config file.
 * Addition of new projects task
 * Addition of slim, projects-only provision
+* Tmux & tmuxinator installed by default. All projects have a tmuxinator configuration.
 
 ---
 
