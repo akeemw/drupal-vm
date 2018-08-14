@@ -24,6 +24,13 @@
   with_items: "{{ apache_vhosts }}"
   when: item.is_project | default(False)
 
+- name: Create tmuxinator project
+  template:
+    src: ../templates/tmuxinator-project-config.yml.j2
+    dest: "/home/{{ drupalvm_user }}/.config/tmuxinator/{{ item.name }}.yml"
+  with_items: "{{ apache_vhosts }}"
+  when: item.is_project | default(False)
+
 - name: Ensure Project MySQL databases are present.
   mysql_db:
     name: "{{ item.name }}"

@@ -65,6 +65,7 @@ extra_packages:
   - libnotify-bin
   - pv
   - sqlite
+  - tmux
 
 # ---------------------------------------------
 # Installed Extra: NodeJS
@@ -81,7 +82,7 @@ nodejs_npm_global_packages:
 # ---------------------------------------------
 
 # `ruby` must be in installed_extras for this to work.
-ruby_install_gems: ['bundler']
+ruby_install_gems: ['bundler', 'tmuxinator']
 
 # ---------------------------------------------
 # PHP Configuration Overrides
