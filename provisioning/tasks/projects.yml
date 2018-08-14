@@ -28,6 +28,7 @@
   template:
     src: ../templates/tmuxinator-project-config.yml.j2
     dest: "/home/{{ drupalvm_user }}/.config/tmuxinator/{{ item.name }}.yml"
+  become: no
   with_items: "{{ apache_vhosts }}"
   when: item.is_project | default(False)
 
