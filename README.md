@@ -54,6 +54,11 @@ Launch a Project Session:
 
       tmuxinator projectname
 
+Switch Between windows with the following key:
+
+1. Do the following key combination: Ctrl-b
+2. Type Window Number
+
 Leave a Project Session:
 
       tmux detach
