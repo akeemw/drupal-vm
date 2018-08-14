@@ -7,6 +7,7 @@ apache_vhosts:
     serveralias: "flat-base.*.xip.io"
     documentroot: "/var/www/flat-base/_site"
     is_project: true
+    gulp_root: "/var/www/flat-base/"
     extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
 
   - servername: "adminer.{{ vagrant_hostname }}"

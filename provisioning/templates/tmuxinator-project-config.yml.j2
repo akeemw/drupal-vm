@@ -41,3 +41,6 @@ root: {{ item.documentroot }}
 windows:
   - main:
   - logs: sudo tail -f /var/log/apache2/error.log
+  {% if item.gulp_root is defined -%}
+    - gulp: cd {{ item.gulp_root }}; gulp
+  {% endif %}
