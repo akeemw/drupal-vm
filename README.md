@@ -25,8 +25,10 @@ Add a new item into "apache_vhosts" in the local.config.yml file with "is_projec
         documentroot: "/var/www/myproject"
         serveralias: "myproject.*.xip.io"
         is_project: true
+        gulp_root: "/var/www/myproject/themes/mytheme"
         extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
 
+The "gulp_root" setting is optional and used only for tmuxinator.
 
 ## Where can I find my projects?
 The `~/Sites/drupalvm-alpha` folder on your Mac will be mounted within the Vagrant VM at `/var/www/`.
