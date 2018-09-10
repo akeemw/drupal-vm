@@ -25,6 +25,7 @@
   when: item.is_project | default(False)
 
 - name: Ensure tmuxinator config folder created
+  become: no
   file: path=/home/{{ drupalvm_user }}/.config/tmuxinator/ state=directory
 
 - name: Create tmuxinator project
