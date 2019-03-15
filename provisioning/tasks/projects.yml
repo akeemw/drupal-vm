@@ -41,7 +41,7 @@
     name: "{{ item.name }}"
     collation: "{{ item.collation | default('utf8_general_ci') }}"
     encoding: "{{ item.encoding | default('utf8') }}"
-    state: present
+    state: "{{ item.create_database | default(True) | ternary('present', 'absent') }}"
   with_items: "{{ apache_vhosts }}"
   when: item.is_project | default(False)
 
@@ -51,6 +51,6 @@
     host: "localhost"
     password: "{{ item.name }}"
     priv: "{{ item.name }}.*:ALL"
-    state: present
+    state: "{{ item.create_database | default(True) | ternary('present', 'absent') }}"
   with_items: "{{ apache_vhosts }}"
   when: item.is_project | default(False)
