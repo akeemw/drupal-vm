@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'yaml'
 
 # Cross-platform way of finding an executable in the $PATH.
@@ -58,8 +60,10 @@ end
 # Require that if installed, the ansible version meets the requirements.
 def require_ansible_version(requirement)
   return unless ansible_bin
+
   req = Gem::Requirement.new(requirement)
   return if req.satisfied_by?(Gem::Version.new(ansible_version))
+
   raise_message "You must install an Ansible version #{requirement} to use this version of Drupal VM."
 end
 
