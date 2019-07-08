@@ -26,25 +26,17 @@ if [ $distro = 'centos7' ]; then
 elif [ $distro = 'centos6' ]; then
   init="/sbin/init"
   opts="--privileged"
+# Ubuntu 18.04
+elif [ $distro = 'ubuntu1804' ]; then
+  init="/lib/systemd/systemd"
+  opts="--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
 # Ubuntu 16.04
 elif [ $distro = 'ubuntu1604' ]; then
   init="/lib/systemd/systemd"
   opts="--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
-# Ubuntu 14.04
-elif [ $distro = 'ubuntu1404' ]; then
-  init="/sbin/init"
-  opts="--privileged"
 # Debian 9
 elif [ $distro = 'debian9' ]; then
   init="/lib/systemd/systemd"
-  opts="--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
-# Debian 8
-elif [ $distro = 'debian8' ]; then
-  init="/lib/systemd/systemd"
-  opts="--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
-# Fedora 24
-elif [ $distro = 'fedora24' ]; then
-  init="/usr/lib/systemd/systemd"
   opts="--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
 fi
 
@@ -100,6 +92,10 @@ docker exec $CONTAINER_ID cp $DRUPALVM_DIR/$COMPOSERFILE ${config_dir:-$DRUPALVM
 # Check playbook syntax.
 printf "\n"${green}"Checking playbook syntax..."${neutral}"\n"
 docker exec --tty $CONTAINER_ID env TERM=xterm ansible-playbook $DRUPALVM_DIR/provisioning/playbook.yml --syntax-check
+
+# Run Ansible Lint.
+docker exec $CONTAINER_ID bash -c "pip install ansible-lint"
+docker exec $CONTAINER_ID bash -c "cd $DRUPALVM_DIR/provisioning && ansible-lint playbook.yml" || true
 
 # Run the setup playbook.
 printf "\n"${green}"Running the setup playbook..."${neutral}"\n"
@@ -179,7 +175,7 @@ docker exec $CONTAINER_ID curl -sSi --header Host:$IP localhost \
 #   || (echo 'Drush install fail' && cat /tmp/dvm-test && exit 1)
 
 # Drush.
-docker exec $CONTAINER_ID $DRUSH_BIN status \
+docker exec $CONTAINER_ID bash -c "cd $DRUPALVM_DIR/drupal && $DRUSH_BIN status" \
   | tee /tmp/dvm-test \
   | grep -q 'Drush' \
   && (echo 'Drush install pass' && exit 0) \

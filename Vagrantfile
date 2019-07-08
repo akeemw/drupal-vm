@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
@@ -20,12 +22,14 @@ unless File.exist?(default_config_file)
   raise_message "Configuration file not found! Expected in #{default_config_file}"
 end
 
-vconfig = load_config([
-  default_config_file,
-  "#{host_config_dir}/config.yml",
-  "#{host_config_dir}/#{drupalvm_env}.config.yml",
-  "#{host_config_dir}/local.config.yml"
-])
+vconfig = load_config(
+  [
+    default_config_file,
+    "#{host_config_dir}/config.yml",
+    "#{host_config_dir}/#{drupalvm_env}.config.yml",
+    "#{host_config_dir}/local.config.yml"
+  ]
+)
 
 provisioner = vconfig['force_ansible_local'] ? :ansible_local : vagrant_provisioner
 if provisioner == :ansible
@@ -51,12 +55,12 @@ Vagrant.configure('2') do |config|
   # Networking configuration.
   config.vm.hostname = vconfig['vagrant_hostname']
   config.vm.network :private_network,
-    ip: vconfig['vagrant_ip'],
-    auto_network: vconfig['vagrant_ip'] == '0.0.0.0' && Vagrant.has_plugin?('vagrant-auto_network')
+                    ip: vconfig['vagrant_ip'],
+                    auto_network: vconfig['vagrant_ip'] == '0.0.0.0' && Vagrant.has_plugin?('vagrant-auto_network')
 
   unless vconfig['vagrant_public_ip'].empty?
     config.vm.network :public_network,
-      ip: vconfig['vagrant_public_ip'] != '0.0.0.0' ? vconfig['vagrant_public_ip'] : nil
+                      ip: vconfig['vagrant_public_ip'] != '0.0.0.0' ? vconfig['vagrant_public_ip'] : nil
   end
 
   # Alpha Addition - Port forwarding for external access and browsersync
@@ -110,7 +114,8 @@ Vagrant.configure('2') do |config|
     config.vm.synced_folder synced_folder.fetch('local_path'), synced_folder.fetch('destination'), options
   end
 
-  config.vm.provision provisioner do |ansible|
+  config.vm.provision 'drupalvm', type: provisioner do |ansible|
+    ansible.compatibility_mode = '2.0'
     ansible.playbook = playbook
     ansible.extra_vars = {
       config_dir: config_dir,
@@ -140,6 +145,7 @@ Vagrant.configure('2') do |config|
     v.cpus = vconfig['vagrant_cpus']
     v.customize ['modifyvm', :id, '--natdnshostresolver1', 'on']
     v.customize ['modifyvm', :id, '--ioapic', 'on']
+    v.customize ['modifyvm', :id, '--audio', 'none']
     v.gui = vconfig['vagrant_gui']
   end
 
