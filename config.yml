@@ -66,6 +66,8 @@ extra_packages:
   - pv
   - sqlite
   - tmux
+  - libnss3
+  - libasound2
 
 # ---------------------------------------------
 # Installed Extra: NodeJS
@@ -76,6 +78,7 @@ nodejs_npm_global_packages:
   - name: bower
   - name: gulp
   - name: grunt
+  - name: yarn
 
 
 # ---------------------------------------------
@@ -83,7 +86,7 @@ nodejs_npm_global_packages:
 # ---------------------------------------------
 
 # `ruby` must be in installed_extras for this to work.
-ruby_install_gems: ['bundler', 'tmuxinator']
+ruby_install_gems: ['bundler']
 
 # ---------------------------------------------
 # PHP Configuration Overrides
