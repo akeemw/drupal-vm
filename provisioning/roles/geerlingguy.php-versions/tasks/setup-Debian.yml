@@ -7,13 +7,6 @@
   apt_repository: repo='ppa:ondrej/php'
   when: ansible_distribution == "Ubuntu"
 
-- name: Add repository for PHP 5 compatibility packages (Ubuntu).
-  apt_repository: repo='ppa:ondrej/php5-compat'
-  when:
-    - php_version == "5.6"
-    - ansible_distribution == "Ubuntu"
-    - ansible_distribution_release != "bionic"
-
 # Debian-specific tasks.
 - name: Add dependencies for PHP versions (Debian).
   apt:
@@ -49,3 +42,12 @@
     state: absent
     purge: true
     force: true
+  register: php_version_purge
+
+- name: Also purge php-common package if any versions were just purged.
+  apt:
+    name: php-common
+    state: absent
+    purge: true
+    force: true
+  when: php_version_purge.changed | bool
