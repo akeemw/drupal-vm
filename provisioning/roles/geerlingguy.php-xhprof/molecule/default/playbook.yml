@@ -16,11 +16,11 @@
       when: ansible_os_family == 'RedHat'
     - role: geerlingguy.php-versions
     - role: geerlingguy.php
-    - role: geerlingguy.php-xdebug
+    - role: geerlingguy.php-xhprof
 
   post_tasks:
-    - name: Run test script to confirm XDebug is working.
-      script: xdebug-test.php
+    - name: Run test script to confirm XHProf is working.
+      script: xhprof-test.php
       args:
         executable: php
       changed_when: false
