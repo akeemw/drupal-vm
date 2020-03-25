@@ -6,23 +6,24 @@
   vars:
     php_enable_webserver: false
     php_enable_php_fpm: true
-    php_memory_limit: "192M"
-    php_enablerepo: "remi,remi-php70"
-    php_install_recommends: false
 
   handlers:
     - name: update apt cache
       apt: update_cache=true
-      when: ansible_os_family == 'Debian'
 
   pre_tasks:
     - name: Update apt cache.
       apt: update_cache=true cache_valid_time=600
       when: ansible_os_family == 'Debian'
-      changed_when: false
 
     # Ubuntu-specific tasks.
-    - name: Add repository for PHP 7.
+    - name: Add dependencies for apt key (Ubuntu).
+      apt:
+        name: dirmngr
+        state: present
+      when: ansible_distribution == 'Ubuntu'
+
+    - name: Add repository for PHP 7 (Ubuntu).
       apt_repository: repo='ppa:ondrej/php'
       when: ansible_distribution == 'Ubuntu'
 
@@ -51,13 +52,5 @@
     - meta: flush_handlers
 
   roles:
-    - role: geerlingguy.repo-remi
-      when:
-        - ansible_os_family == 'RedHat'
-        - ansible_distribution != 'Fedora'
-    - role: geerlingguy.php
-
-  post_tasks:
-    - name: Confirm PHP configuration is correct.
-      shell: php -i | grep 'memory_limit.*192'
-      changed_when: false
+    - geerlingguy.php
+    - geerlingguy.blackfire
