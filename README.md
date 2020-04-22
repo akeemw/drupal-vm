@@ -21,7 +21,7 @@ Drupal VM - Alpha is a set of small alterations to the amazing core built by gee
 Add a new item into "apache_vhosts" in the local.config.yml file with "is_project" set to true.
 
       - name: "myproject"
-        servername: "myproject.dev"
+        servername: "myproject.test"
         documentroot: "/var/www/myproject"
         serveralias: "myproject.*.xip.io"
         is_project: true
