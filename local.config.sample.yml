@@ -3,7 +3,7 @@
 # View the geerlingguy.apache Ansible Role README for more options.
 apache_vhosts:
   - name: "flat-base"
-    servername: "flat-base.dev"
+    servername: "flat-base.test"
     serveralias: "flat-base.*.xip.io"
     documentroot: "/var/www/flat-base/_site"
     is_project: true
