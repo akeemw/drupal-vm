@@ -23,10 +23,12 @@ env:
     # Defaults - Debian 9.
     - type: debian
       distro: debian9
+      ANSIBLE_PYTHON_INTERPRETER: /usr/bin/python
     # Defaults - CentOS 7.
     - type: centos
       distro: centos7
       local_config: tests/centos-7.config.yml
+      ANSIBLE_PYTHON_INTERPRETER: /usr/bin/python
 
     # PHP 7.3 - Ubuntu 18.04.
     - type: defaults
@@ -35,31 +37,21 @@ env:
       DRUSH_BIN: "${DRUPALVM_DIR}/drupal/vendor/bin/drush"
       TEST_INSTALLED_EXTRAS: false
 
-    # Nginx and Drush make file test - Ubuntu 16.04.
-    # - type: nginx-drush-make
-    #   distro: ubuntu1604
-    #   local_config: tests/ubuntu-16-nginx-drush-make.config.yml
-    #   config_dir: /var/www/drupalvm/config
-
-    # TODO: See https://github.com/geerlingguy/drupal-vm/issues/1675
-    # PostgreSQL - Ubuntu 16.04.
-    # - type: postgresql
-    #   distro: ubuntu1604
-    #   local_config: tests/ubuntu-16-postgresql.config.yml
-    #   config_dir: /var/www/drupalvm/config
-    #   DRUSH_BIN: "${DRUPALVM_DIR}/drupal/vendor/bin/drush"
-    #   TEST_INSTALLED_EXTRAS: false
+    # PostgreSQL - Ubuntu 18.04.
+    - type: postgresql
+      distro: ubuntu1804
+      local_config: tests/ubuntu-18-postgresql.config.yml
+      DRUSH_BIN: "${DRUPALVM_DIR}/drupal/vendor/bin/drush"
+      config_dir: /var/www/drupalvm/config
+      TEST_INSTALLED_EXTRAS: false
 
 before_install:
-  # Pull container.
-  - docker pull geerlingguy/docker-${distro}-ansible:latest
-
   # Install lint tools.
   - gem install rubocop
 
 script:
   # Vagrantfile syntax check.
-  - 'rubocop ./Vagrantfile ./lib/drupalvm --except LineLength,Eval,MutableConstant,BlockLength,MethodLength,ConditionalAssignment,AlignParameters'
+  - 'rubocop ./Vagrantfile ./lib/drupalvm --except Metrics/LineLength,Security/Eval,Style/MutableConstant,Metrics/BlockLength,Metrics/MethodLength,Style/ConditionalAssignment,Style/IfUnlessModifier'
 
   # Run tests.
   - composer run-tests
