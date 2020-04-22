@@ -42,7 +42,7 @@ installed_extras:
   - drupalconsole
   - drush
   # - elasticsearch
-  # - javafirewall_allowed_tcp_ports
+  # - java
   - mailhog
   # - memcached
   # - newrelic
