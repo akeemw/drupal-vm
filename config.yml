@@ -39,7 +39,7 @@ projects_only_provision: false
 installed_extras:
   - adminer
   # - blackfire
-  - drupalconsole
+  #- drupalconsole
   - drush
   # - elasticsearch
   # - java
@@ -52,7 +52,7 @@ installed_extras:
   - ruby
   # - selenium
   # - solr
-  # - tideways
+  - tideways
   # - upload-progress
   - varnish
   - xdebug
