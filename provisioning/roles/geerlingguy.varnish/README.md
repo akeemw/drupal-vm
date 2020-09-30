@@ -16,9 +16,9 @@ Available variables are listed below, along with default values (see `defaults/m
 
 Varnish package name you want to install. See `apt-cache policy varnish` or `yum list varnish` for a listing of available candidates.
 
-    varnish_version: "6.1"
+    varnish_version: "6.4"
 
-Varnish version that should be installed. See the [Varnish Cache packagecloud.io repositories](https://packagecloud.io/varnishcache) for a listing of available versions. Some examples include: `6.1`, `6.0`, `5.1`, `4.1`, `3.0`, and `2.1`.
+Varnish version that should be installed. See the [Varnish Cache packagecloud.io repositories](https://packagecloud.io/varnishcache) for a listing of available versions. Some examples include: `6.4`, `6.3`, `6.1`, `4.1`, `3.0`, and `2.1`.
 
     varnish_config_path: /etc/varnish
 
@@ -32,9 +32,10 @@ Whether to use the included (simplistic) default Varnish VCL, using the backend 
 
 The default VCL file to be copied (if `varnish_use_default_vcl` is `true`). Defaults the the simple template inside `templates/default.vcl.j2`. This path should be relative to the directory from which you run your playbook.
 
+    varnish_listen_address: ""
     varnish_listen_port: "80"
 
-The port on which Varnish will listen (typically port 80).
+The address and port on which Varnish will listen. The defaults tell Varnish to listen on all interfaces on port 80, but you can specify an address and/or alternate port if desired.
 
     varnish_default_backend_host: "127.0.0.1"
     varnish_default_backend_port: "8080"
