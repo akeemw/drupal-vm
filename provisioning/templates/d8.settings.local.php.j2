@@ -1,6 +1,6 @@
 <?php
 
-/* Drupal 8 Local Settings File */
+/* Drupal 8 & 9 Local Settings File */
 
 $databases = array();
 $databases['default']['default'] = array(
@@ -41,6 +41,11 @@ $config['environment_indicator.indicator']['bg_color'] = '#9309eb';
 
 // Disable the Shield module
 $config['shield.settings']['user'] = NULL;
+
+/**
+ * Use local config split settings.
+ */
+$config['config_split.config_split.local']['status'] = TRUE;
 
 /**
  * Disable CSS and JS aggregation.
