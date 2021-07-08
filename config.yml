@@ -92,7 +92,7 @@ ruby_install_gems: ['bundler']
 # PHP Configuration Overrides
 # ---------------------------------------------
 
-php_version: "7.3"
+php_version: "7.4"
 # php_packages:
 #   - php5
 #   - php5-apcu
