@@ -32,12 +32,14 @@
 
   roles:
     # Essential roles.
+    - { role: geerlingguy.repo-epel, when: ansible_os_family == 'RedHat' }
     - { role: geerlingguy.repo-remi, when: ansible_os_family == 'RedHat', tags: ['webserver', 'php'] }
     - { role: drupalvm.hostname, when: hostname_configure }
+    - { role: drupalvm.vagrant-nfs-fix, when: vagrant_nfs_fix_enabled }
     - { role: geerlingguy.firewall, when: firewall_enabled }
     - { role: geerlingguy.git }
     - { role: geerlingguy.postfix }
-    - { role: geerlingguy.apache, when: drupalvm_webserver == 'apache', tags: ['webserver', 'projects']}
+    - { role: geerlingguy.apache, when: drupalvm_webserver == 'apache', tags: ['webserver', 'projects'] }
     - { role: geerlingguy.apache-php-fpm, when: drupalvm_webserver == 'apache', tags: ['webserver'] }
     - { role: geerlingguy.nginx, when: drupalvm_webserver == 'nginx', tags: ['webserver'] }
     - { role: geerlingguy.php-versions, when: php_version != '', tags: ['php', 'xdebug', 'database'] }

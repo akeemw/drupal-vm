@@ -1,6 +1,6 @@
 # Ansible Role: Memcached
 
-[![Build Status](https://travis-ci.org/geerlingguy/ansible-role-memcached.svg?branch=master)](https://travis-ci.org/geerlingguy/ansible-role-memcached)
+[![CI](https://github.com/geerlingguy/ansible-role-memcached/workflows/CI/badge.svg?event=push)](https://github.com/geerlingguy/ansible-role-memcached/actions?query=workflow%3ACI)
 
 An Ansible Role that installs Memcached on RedHat/CentOS or Debian/Ubuntu Linux.
 
@@ -21,10 +21,15 @@ The user under which the Memcached daemon will run.
 
 The port and IP address (127.0.0.1 for localhost) on which Memcached will listen for requests.
 
+    memcached_threads: 4
+
+Number of threads to run.
+
     memcached_memory_limit: 64
+    memcached_max_item_size: 1m
     memcached_connections: 1024
 
-Memcached limits. The maximum amount of RAM `memcached` will consume (64MB is the default), and the maximum number of simultaneous connections memcached will handle.
+Memcached limits. The maximum amount of RAM `memcached` will consume (64MB is the default), the memory-limit of a single item and the maximum number of simultaneous connections memcached will handle.
 
     memcached_log_file: /var/log/memcached.log
 

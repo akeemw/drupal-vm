@@ -6,7 +6,7 @@ An Ansible Role that installs Elasticsearch on RedHat/CentOS or Debian/Ubuntu.
 
 ## Requirements
 
-Requires at least Java 8. See [`geerlingguy.java`](https://github.com/geerlingguy/ansible-role-java#example-playbook-install-openjdk-8) role instructions for installing OpenJDK 8.
+Requires at least Java 8. You can use the [`geerlingguy.java`](https://github.com/geerlingguy/ansible-role-java) to easilly install Java.
 
 ## Role Variables
 
@@ -41,9 +41,19 @@ The minimum jvm heap size.
 
 The maximum jvm heap size.
 
+    elasticsearch_extra_options: ''
+
+A placeholder for arbitrary configuration options not exposed by the role. This will be appended as-is to the end of the `elasticsearch.yml` file, as long as your variable preserves formatting with a `|`. For example:
+
+```yaml
+elasticsearch_extra_options: |  # Dont forget the pipe!
+  some.option: true
+  another.option: false
+```
+
 ## Dependencies
 
-  - geerlingguy.java
+None.
 
 ## Example Playbook
 

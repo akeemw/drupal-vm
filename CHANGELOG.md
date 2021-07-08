@@ -1,5 +1,129 @@
 # Drupal VM Changelog
 
+## 6.0.4 (2021-05-28)
+
+### Breaking Changes
+
+N/A
+
+### New/changed variables in default.config.yml
+
+  * Added variable `vagrant_nfs_fix_enabled: false` - See #2154. If you are having trouble with NFS going away on macOS Big Sur, override this variable and set it to `true` to overcome a Vagrant bug in the latest version of macOS.
+
+### Improvements
+
+  * Upgraded php-versions, solr, memcached, nginx, and mysql roles to latest versions.
+
+### Bugfixes
+
+  * #2154: Add new `vagrant-nfs-fix` role to solve NFS issues on macOS Big Sur.
+  * #2166: Fix ansible version output regex matching for new core/community version output.
+
+
+## 6.0.3 (2021-02-13)
+
+### Breaking Changes
+
+N/A
+
+### New/changed variables in default.config.yml
+
+  * Replaced obsolete variable `php_opcache_enabled_in_ini` with `php_opcache_enable`.
+
+### Improvements
+
+  * #2109: Switch CI test environment from homegrown script and Travis CI to Molecule and GitHub Actions.
+  * Updated Postgres role to latest version.
+  * Updated Composer role to latest version to allow switching between Composer major versions.
+
+### Bugfixes
+
+  * #2137: Use pip3 inside VM if using ansible_local provisioner.
+  * #2144: Update docs for native synced folder usage due to changed typing of the variable in Vagrant.
+  * #2121: Replace php_opcache_enabled_in_ini with php_opcache_enable.
+  * Updated Drush role for better Composer v2 compatibility.
+
+
+## 6.0.2 (2020-10-27)
+
+### Breaking Changes
+
+N/A
+
+### New/changed variables in default.config.yml
+
+The `hirak/prestissimo` package was removed from `composer_global_packages` (and that variable is now empty).
+
+### Improvements
+
+  * N/A
+
+### Bugfixes
+
+  * #2100: Remove hirak/prestissimo, for Composer v2 compatibility.
+  * #2095: Fix syntax errors in example drupal.composer.json file.
+
+
+## 6.0.1 (2020-09-29)
+
+### Breaking Changes
+
+N/A
+
+### New/changed variables in default.config.yml
+
+N/A
+
+### Improvements
+
+  * #2083: Improve README guide for installing Drupal 8 instead of default Drupal 9.
+  * Updated roles: security, nginx, mysql, php, php-mysql, solr, elasticsearch, repo-remi, composer.
+
+### Bugfixes
+
+  * #2076: Fix bug when switching PHP versions to/from PHP 7.4.
+
+
+## 6.0.0 "Rectifier" (2020-07-14)
+
+Drupal VM 6 drops support for some older OS distributions, to increase stability under the latest versions of Ubuntu, CentOS, and Debian, and to finally drop all support for the now-unsupported Python 2.
+
+The Drupal VM Docker container image is now based on Debian 10 Buster, though the default Drupal VM box when running as a VirtualBox VM is still based on Ubuntu 18.04.
+
+The default PHP version is now PHP 7.4, which works great with all the latest versions of Drupal 7, 8, and 9.
+
+### Breaking Changes
+
+  * #2065: Drop official support for Debian 9, CentOS 7, and Ubuntu 16.04 and Python 2.
+  * #2061: Default to PHP 7.4.
+  * Drupal VM Docker container now based on Debian 10 Buster.
+
+### New/changed variables in default.config.yml
+
+  * Removed `centos7`, `debian9`, and `ubuntu1604` from `vagrant_box` options.
+  * `ansible_python_interpreter` now defaults to `python3` (was `/usr/bin/python3`).
+  * `drupal_composer_dependencies` now includes both `"drush/drush:^10"` and `"drupal/devel:^4.0"`.
+  * `drupal_composer_project_package` now defaults to the recommended Drupal project: `"drupal/recommended-project:^9@dev"`.
+  * `drupal_major_version` is now `9` (was `8`).
+  * `php_version` is now `"7.4"` (was `"7.2"`).
+  * Added `php_xdebug_version: 2.9.5`.
+
+### Improvements
+
+  * #2050: Default to Drupal 9.
+  * #1997: Include `php_xdebug_version` in default config for visibility.
+  * Updated roles: varnish, solr, elasticsearch, java, memcached, postgresql, adminer, php, drupal.
+
+### Bugfixes
+
+  * #2041: Point to Python 3 interpreter in `$PATH`.
+  * #2062: Allow Composer to use more memory since it runs out at 1.5 GB.
+  * #2063: Update Devel version to work with Drupal 9.
+  * #2064: Explicitly require Drush on new sites to work with Drupal 9.
+  * #2066: Fix postfix service failure on CentOS 8 test container.
+  * #2059: Improve docs for Windows usage.
+
+
 ## 5.2.0 "The Game Has Changed" (2020-03-20)
 
 This release defaults to Python 3 for all Ansible-related tasks, which means some older OSes require a new variable to be overridden to work correctly. For most users, no change is required, however. The release also updates the order in which Postgresql updates
